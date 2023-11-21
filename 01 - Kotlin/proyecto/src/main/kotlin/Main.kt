@@ -1,4 +1,5 @@
 import java.util.*
+import kotlin.collections.ArrayList
 
 fun main(){
 
@@ -65,7 +66,93 @@ fun main(){
     val sumaUno = Suma(1,1)
     val sumaDos = Suma(null, 1)
     val sumaTres = Suma(1, null)
+    val sumaCuatro = Suma(null, null)
+    sumaUno.sumar()
+    sumaDos.sumar()
+    sumaTres.sumar()
+    sumaCuatro.sumar()
+    println(Suma.pi)
+    println(Suma.elevarAlCuadrado(2))
+    println(Suma.historialSumas)
 
+    //Tipos de Arreglos
+
+    // Arreglo Estático
+    val arregloEstatico: Array<Int> = arrayOf(1,2,3)
+    println(arregloEstatico)
+
+    // Arreglo Dinámico
+    val arregloDinamico: ArrayList<Int> = arrayListOf(
+        1,2,3,4,5,6,7,8,9,10
+    )
+    println(arregloDinamico)
+    arregloDinamico.add(11)
+    arregloDinamico.add(12)
+    println(arregloDinamico)
+
+    // FOR EACH -> UNIT
+    // Iterar un arreglo
+    val respuestaForEach: Unit = arregloDinamico.forEach{ valorActual: Int ->
+        println("Valor actual: $valorActual")
+    }
+
+    arregloDinamico.forEach{ println(it) }
+
+    arregloEstatico.forEachIndexed{
+        indice: Int, valorActual: Int ->
+        println("Valor $valorActual Indice: $indice")
+    }
+
+    // MAP -> Muta el arreglo
+    // 1. enviamos el nuevo valor de la iteracion
+    // 2. nos devuelve un nuevo arreglo con los valores modificados
+
+    val respuestaMap: List<Double> = arregloDinamico.map{
+        valorActual: Int ->
+        return@map valorActual.toDouble() + 100
+    }
+
+    val respuestaMapDos = arregloDinamico.map {it + 15}
+    println(respuestaMap)
+    println(respuestaMapDos)
+
+    // FILTER
+    // 1. Devolver una expresion True or False
+    // 2. Nuevo arreglo filtrado
+    val respuestaFilter: List<Int> = arregloDinamico.filter {
+        valorActual: Int ->
+        //Expresion Condicion
+        val mayoresACinco: Boolean = valorActual > 5
+        return@filter mayoresACinco
+    }
+    val respuestaFilterDos = arregloDinamico.filter { it <= 5 }
+    println(respuestaFilter)
+    println(respuestaFilterDos)
+
+    // OR AND
+    // Or -> ANY
+    // And -> ALL
+
+    val  respuestaAny: Boolean = arregloDinamico.any{
+        valorActual: Int ->
+        return@any (valorActual > 5)
+    }
+    println(respuestaAny)
+
+    val respuestaAll: Boolean = arregloDinamico.all {
+        valorActual: Int ->
+        return@all (valorActual > 5)
+    }
+    println(respuestaAll)
+
+    //REDUCE -> Acumulador
+    //Valor acumulado siempre = 0
+
+    val respuestaReduce: Int = arregloDinamico.reduce{
+        acumulado: Int, valorActual: Int ->
+        return@reduce (acumulado + valorActual)
+    }
+    println(respuestaReduce)
 }
 abstract class NumeroJava{
     protected val numeroUno: Int
@@ -109,19 +196,29 @@ class Suma(
     }
     constructor(//  Segundo constructor
         uno: Int?, // parametros
-        dos: Int // parametros
-    ) : this(  // llamada constructor primario
-        if (uno == null) 0 else uno,
-        dos
-    ) { // si necesitamos bloque de codigo lo usamos
-        numeroUno;
-    }
-
-    constructor(//  tercer constructor
-        uno: Int, // parametros
         dos: Int? // parametros
     ) : this(  // llamada constructor primario
-        uno,
-        if (dos == null) 0 else uno
-    ) // Si no lo necesitamos al bloque de codigo "{}" lo omitimos
+        if (uno == null) 0 else uno,
+        if (dos == null) 0 else dos
+    )
+
+    public fun sumar(): Int {
+        val total = numeroUno + numeroDos
+        agregarHistorial(total)
+        return total
+    }
+
+    companion object {
+        // Atributos y métodos 'compartidos' entre las instancias
+        val pi = 3.14
+
+        fun elevarAlCuadrado(num: Int): Int {
+            return num * num
+        }
+        val historialSumas = arrayListOf<Int>()
+
+        fun agregarHistorial(valorNuevaSuma: Int){
+            historialSumas.add(valorNuevaSuma)
+        }
+    }
 }
