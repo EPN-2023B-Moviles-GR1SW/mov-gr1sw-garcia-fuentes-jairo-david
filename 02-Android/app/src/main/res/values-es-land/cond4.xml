@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="saludo">Buenas noches</string>
+    <color name="colorTexto">#FFEB3B</color>
+    <color name="fondo">#16214C</color>
 
 </resources>
