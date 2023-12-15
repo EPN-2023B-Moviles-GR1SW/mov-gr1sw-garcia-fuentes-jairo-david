@@ -1,5 +1,5 @@
 buildscript {
-    val kotlin_version by extra("2.0.0-Beta1")
+    val kotlin_version by extra("1.8.10")
     dependencies {
         classpath("com.android.tools.build:gradle:7.3.0")
         classpath("com.google.gms:google-services:4.4.0")
