@@ -30,11 +30,20 @@ fun main(){
             2 -> {
                 agregarCancion()
             }
+            3 -> {
+                mostrarArtistas()
+            }
             4 -> {
                 mostrarCanciones()
             }
+            5 -> {
+                actualizarArtista()
+            }
             6 -> {
                 actualizarCancion()
+            }
+            7 -> {
+                eliminarArtista()
             }
             8 -> {
                 eliminarCancion()
@@ -49,6 +58,7 @@ fun main(){
 
 }
 
+// CRUD ARTISTA
 fun agregarArtista() {
     println("------------------ AGREGAR ARTISTA ------------------")
     print("Ingrese el id del artista: ")
@@ -73,14 +83,70 @@ fun agregarArtista() {
     val cancionesIndex = cancionesString.split(",")
         .filter { it.isNotEmpty() }
         .map { it.trim().toInt() }
-    println(cancionesIndex.size)
+
 
     val canciones = List(cancionesIndex.size) { Cancion.getCancion(cancionesIndex[it]) }
     val artista = Artista(id, nombre, edad, canciones, vivo, patrimonio)
     artista.crearArtista()
 }
 
+fun mostrarArtistas() {
+    println("------------------ MOSTRAR ARTISTAS ------------------")
+    val artistas = Artista.getArtistas()
+    artistas.forEach { println(it) }
 
+
+}
+
+fun actualizarArtista(){
+    println("------------------ ACTUALIZAR ARTISTA ------------------")
+    print("Ingrese el id del artista a actualizar: ")
+    val id = readLine()?.toIntOrNull() ?: return println("Id inválido.")
+
+    val artista = Artista.getArtista(id)
+    if (artista != null) {
+        print("Ingrese el nuevo nombre del artista: ")
+        val nombre = readLine() ?: throw IllegalArgumentException("Nombre inválido.")
+
+        print("Ingrese la nueva edad del artista: ")
+        val edad = readLine()?.toIntOrNull() ?: throw IllegalArgumentException("Edad inválida.")
+
+        print("Ingrese el nuevo id de las canciones del artista separadas por coma(1, 2, 3, ...): ")
+        val cancionesString = readLine() ?: throw IllegalArgumentException("Canciones inválidas.")
+
+        print("Ingrese si el artista está vivo (true/false): ")
+        val vivoStr = readLine()?.toLowerCase() ?: throw IllegalArgumentException("Valor vivo inválido.")
+        val vivo = vivoStr == "true"
+
+        print("Ingrese el nuevo patrimonio del artista: ")
+        val patrimonio = readLine()?.toDoubleOrNull() ?: throw IllegalArgumentException("Patrimonio inválido.")
+
+        val cancionesIndex = cancionesString.split(",")
+            .filter { it.isNotEmpty() }
+            .map { it.trim().toInt() }
+
+        val canciones = List(cancionesIndex.size) { Cancion.getCancion(cancionesIndex[it]) }
+        val artistaNuevo = Artista(id, nombre, edad, canciones, vivo, patrimonio)
+        artista.actualizarArtista(artistaNuevo)
+    } else {
+        println("No se encontró el artista con el id: $id")
+    }
+}
+
+fun eliminarArtista() {
+    println("------------------ ELIMINAR ARTISTA ------------------")
+    print("Ingrese el id del artista a eliminar: ")
+    val id = readLine()?.toIntOrNull() ?: return println("Id inválido.")
+
+    val artista = Artista.getArtista(id)
+    if (artista != null) {
+        artista.eliminarArtista(id)
+    } else {
+        println("No se encontró el artista con el id: $id")
+    }
+}
+
+//CRUD CANCIÓN
 fun agregarCancion() {
     println("------------------ AGREGAR CANCIÓN ------------------")
     print("Ingrese el id de la canción: ")
@@ -105,14 +171,6 @@ fun agregarCancion() {
     val fecha = dateFormat.parse(fechaLanzamiento)
     val cancion = Cancion(id, nombre, duracion, album, genero, fecha)
     cancion.crearCancion()
-}
-
-fun mostrarArtistas() {
-   /* println("------------------ MOSTRAR ARTISTAS ------------------")
-    val artistas = Artista.obtenerArtistas()
-    artistas.forEach { println(it) }
-
-    */
 }
 
 fun mostrarCanciones() {

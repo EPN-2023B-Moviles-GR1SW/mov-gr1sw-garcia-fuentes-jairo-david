@@ -38,28 +38,33 @@ class Cancion (
     }
 
     fun eliminarCancion(id: Int) {
+        // Eliminar la canción del archivo de canciones
         val canciones = File(fileName).readLines()
-        val cancionesActualizadas = canciones.filter { !it.startsWith("$id,") }
-        File(fileName).writeText(cancionesActualizadas.joinToString("\n"))
 
-        /*val archivoArtista = System.getProperty("user.dir")+ "\\src\\main\\kotlin\\archivos\\artista.txt"
+        // Obtener artistas relacionados con la canción
         val artistas = Artista.getArtistasByCancion(id)
 
+        // Actualizar cada artista y guardar los cambios
         artistas.forEach { artista ->
-            val artistasActualizados = artistas.map { artistaActualizado ->
-                if (artistaActualizado.startsWith("${artistaActualizado.id},")) {
-                    "${artistaActualizado.id},${artistaActualizado.nombre},${artistaActualizado.genero},${artistaActualizado.fechaNacimiento}"
-                } else {
-                    artista
-                }
-            }
-            File(archivoArtista).writeText(artistasActualizados.joinToString("\n"))
-        }*/
+            val cancionesSinCancionEliminada = artista.canciones.filter { it.id != id }
+            val artistaActualizado = Artista(
+                artista.id,
+                artista.nombre,
+                artista.edad,
+                cancionesSinCancionEliminada,
+                artista.vivo,
+                artista.patrimonio
+            )
+            artista.actualizarArtista(artistaActualizado)
+        }
+        val cancionesActualizadas = canciones.filter { !it.startsWith("$id,") }
+        File(fileName).writeText(cancionesActualizadas.joinToString("\n"))
     }
 
-        override fun toString(): String {
+
+    override fun toString(): String {
         val dateFormat = SimpleDateFormat("dd/MM/yyyy")
-        return "Cancion(id=$id, nombre='$nombre', duracion=$duracion, album=${album} , genero=$genero, fechaLanzamiento=${dateFormat.format(fechaLanzamiento)}"
+        return "Cancion(id=$id, nombre='$nombre', duracion=$duracion min, album='${album}' , genero='$genero', fechaLanzamiento=${dateFormat.format(fechaLanzamiento)})"
     }
 
     companion object {

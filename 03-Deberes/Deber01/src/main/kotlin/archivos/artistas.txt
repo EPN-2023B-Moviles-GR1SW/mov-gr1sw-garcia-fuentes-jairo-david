@@ -1,5 +1,0 @@
-1,Jairo,22,[Cancion(id=1, nombre='Kami', duracion=2, album=sama , genero=pop, fechaLanzamiento=31/12/2023],true,2000.0
-1,j,3,[Cancion(id=1, nombre='Kami', duracion=2, album=sama , genero=pop, fechaLanzamiento=31/12/2023],true,2.0
-1,j,2,[],true,2.0
-1,j,2,[],true,2.0
-1,Jairo,2,[Cancion(id=1, nombre='Kami', duracion=2, album=sama , genero=pop, fechaLanzamiento=31/12/2023, Cancion(id=2, nombre='Gira', duracion=3, album=ado , genero=pop, fechaLanzamiento=31/12/2023],true,20.0
