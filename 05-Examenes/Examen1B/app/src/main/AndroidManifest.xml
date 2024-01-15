@@ -13,19 +13,19 @@
         android:theme="@style/Theme.AppCompat.Light"
         tools:targetApi="31">
         <activity
-            android:name=".FRecyclerView"
+            android:name=".EditarCancionActivity"
             android:exported="false" />
         <activity
-            android:name=".ECrudEntrenador"
+            android:name=".CrearCancionActivity"
             android:exported="false" />
         <activity
-            android:name=".CIntentExplicitoParametros"
+            android:name=".EditarArtistaActivity"
             android:exported="false" />
         <activity
-            android:name=".BListView"
+            android:name=".CrearArtistaActivity"
             android:exported="false" />
         <activity
-            android:name=".ACicloVida"
+            android:name=".CancionActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

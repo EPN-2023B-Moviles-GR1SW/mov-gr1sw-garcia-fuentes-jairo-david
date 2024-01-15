@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "161638803529",
+    "project_id": "trabajoenclase01",
+    "storage_bucket": "trabajoenclase01.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:161638803529:android:7a2828c1fd0facc055f798",
+        "android_client_info": {
+          "package_name": "com.example.b2023_gr1sw_jdgf"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCZrZ5wmaCt8i6RwTjDq4UXgfcboZqgOc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
