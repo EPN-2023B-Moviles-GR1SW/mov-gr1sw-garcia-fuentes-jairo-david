@@ -1,19 +1,19 @@
 package com.example.examen1b
 
-import java.util.*
+import com.example.examen1b.sqlite.SqliteBDD
 
 class Artista (
     var id: Int,
     var nombre: String,
     var edad: Int,
-    var canciones: ArrayList<Cancion>,
     var vivo: Boolean,
     var patrimonio: Double
 
 ) {
+    val canciones = SqliteBDD.BDMundoMuscial!!.numeroCanciones(this.id)
 
     override fun toString(): String {
-        return "$nombre - [ ${canciones.size}" + if (canciones.size == 1) " canción ]" else " canciones ]"
+        return "$nombre - [ ${canciones}" + if (canciones == 1) " canción ]" else " canciones ]"
     }
 
 

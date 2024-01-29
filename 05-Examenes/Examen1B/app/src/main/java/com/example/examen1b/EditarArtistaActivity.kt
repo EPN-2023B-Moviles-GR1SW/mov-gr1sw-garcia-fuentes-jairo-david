@@ -8,20 +8,18 @@ import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.EditText
+import com.example.examen1b.sqlite.SqliteBDD
 import com.google.android.material.snackbar.Snackbar
 
 class EditarArtistaActivity : AppCompatActivity() {
-    val arregloArtistas = BaseDatosMemoria.arrayArtista
-    val arregloCanciones = BaseDatosMemoria.arrayCancion
-
+    val arregloCanciones = SqliteBDD.BDMundoMuscial!!.consultarCanciones()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_editar_artista)
 
         val idArtista = intent.getIntExtra("idArtista", -1)
-        val artista = arregloArtistas.find { artista -> artista.id == idArtista }
-        val indexArtista = arregloArtistas.indexOf(artista)
+        val artista = SqliteBDD.BDMundoMuscial!!.consultarArtistaPorID(idArtista)
 
         //Autollenado de datos
         val inputNombre = findViewById<EditText>(R.id.input_edit_nombre)
@@ -42,7 +40,7 @@ class EditarArtistaActivity : AppCompatActivity() {
                 checkBox.tag = cancion.id // Asigna el ID de la canción como una etiqueta al CheckBox
 
                 // Verifica si la canción está presente en la lista de canciones del artista
-                if (it.canciones.contains(cancion)) {
+                if (cancion.idArtista == it.id ) {
                     checkBox.isChecked = true
                 }
 
@@ -60,13 +58,13 @@ class EditarArtistaActivity : AppCompatActivity() {
 
         val botonEditarArtista = findViewById<Button>(R.id.btn_editar_artista)
         botonEditarArtista.setOnClickListener {
-            guardarArtista(artista!!, indexArtista)
+            guardarArtista(artista!!)
             intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
     }
 
-    fun guardarArtista (artista: Artista, indexArtista: Int) {
+    fun guardarArtista (artista: Artista) {
         // Verificar si el artista no es nulo antes de intentar actualizar
         artista?.let {
             // Obtener referencias a los elementos de la interfaz de usuario
@@ -82,24 +80,35 @@ class EditarArtistaActivity : AppCompatActivity() {
             it.patrimonio = inputPatrimonio.text.toString().toDouble()
             it.vivo = rdbVivo.isChecked
 
-            // Limpiar la lista de canciones del artista y volver a agregar las seleccionadas
-            it.canciones.clear()
+            // Actualizar el artista en la base de datos
+            SqliteBDD.BDMundoMuscial!!.actualizarArtista(
+                it.nombre,
+                it.edad,
+                it.vivo,
+                it.patrimonio,
+                it.id,
+            )
 
             // Iterar sobre los CheckBox en el LinearLayout de canciones
             for (i in 0 until llCanciones.childCount) {
                 val checkBox = llCanciones.getChildAt(i) as CheckBox
+                val idCancion = checkBox.tag as Int
+                val nuevaCancion = obtenerCancionPorId(idCancion)
                 if (checkBox.isChecked) {
-
-                    val idCancion = checkBox.tag as Int
-                    val nuevaCancion = obtenerCancionPorId(idCancion)
                     if (nuevaCancion != null) {
-                        it.canciones.add(nuevaCancion)
+                        SqliteBDD.BDMundoMuscial!!.asignarArtistaACancion(
+                            it.id,
+                            idCancion
+                        )
                     }
+                }else{
+                    SqliteBDD.BDMundoMuscial!!.asignarArtistaACancion(
+                        null,
+                        idCancion
+                    )
                 }
             }
 
-            // Actualizar el artista en el arreglo
-            arregloArtistas[indexArtista] = it
 
             // Limpiar los campos después de guardar el artista
             inputNombre.text.clear()

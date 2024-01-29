@@ -12,11 +12,12 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
+import com.example.examen1b.sqlite.SqliteBDD
 import com.google.android.material.snackbar.Snackbar
 
 class CancionActivity : AppCompatActivity() {
-    val arregloArtistas = BaseDatosMemoria.arrayArtista
-    val arregloCanciones = BaseDatosMemoria.arrayCancion
+
+    var arregloCanciones = arrayListOf<Cancion>()
     var posicionItemSeleccionado = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,28 +26,28 @@ class CancionActivity : AppCompatActivity() {
 
 
         val idArtista= intent.getIntExtra("idArtista", -1)
-        val artista = arregloArtistas.find { artista -> artista.id == idArtista }
-        val indexArtista = arregloArtistas.indexOf(artista)
+        val artista = SqliteBDD.BDMundoMuscial!!.consultarArtistaPorID(idArtista)
+
 
         val txtArtista = findViewById<TextView>(R.id.txt_artista)
-        txtArtista.text = arregloArtistas[indexArtista].nombre
+        txtArtista.text = artista.nombre
         val txtEdad = findViewById<TextView>(R.id.txt_edad)
-        txtEdad.text = "Edad: ${arregloArtistas[indexArtista].edad}"
+        txtEdad.text = "Edad: ${artista.edad}"
         val txtPatrimonio = findViewById<TextView>(R.id.txt_patrimonio)
-        txtPatrimonio.text = "Patrimonio: $${arregloArtistas[indexArtista].patrimonio}"
+        txtPatrimonio.text = "Patrimonio: $${artista.patrimonio}"
         val txtEstado = findViewById<TextView>(R.id.txt_estado)
-        if (arregloArtistas[indexArtista].vivo){
+        if (artista.vivo){
             txtEstado.text = "Estado: Vivo"
         }else{
             txtEstado.text = "Estado: Muerto"
         }
 
         val listView = findViewById<ListView>(R.id.list_cancion)
-
+        arregloCanciones = SqliteBDD.BDMundoMuscial!!.consultarCancionesPorArtista(idArtista)
         val adaptador = ArrayAdapter(
             this, //Context
             android.R.layout.simple_list_item_1, //como se va a ver (XML)
-            artista!!.canciones
+            arregloCanciones
         )
         listView.adapter = adaptador
         adaptador.notifyDataSetChanged()
@@ -79,20 +80,22 @@ class CancionActivity : AppCompatActivity() {
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
         val idArtista= intent.getIntExtra("idArtista", -1)
-        val artista = arregloArtistas.find { artista -> artista.id == idArtista }
         return when (item.itemId){
             R.id.mi_editar_cancion ->{
                 val intent = Intent(this, EditarCancionActivity::class.java)
-                intent.putExtra("indexArtista", arregloArtistas.indexOf(artista))
-                intent.putExtra("indexCancion", arregloCanciones.indexOf(artista!!.canciones[posicionItemSeleccionado]))
-                intent.putExtra("posicionCancion", posicionItemSeleccionado)
+                intent.putExtra("idCancion", arregloCanciones[posicionItemSeleccionado].id)
                 startActivity(intent)
                 return true
             }
             R.id.mi_eliminar_cancion ->{
-                artista!!.canciones.removeAt(posicionItemSeleccionado)
-                val listViewCancion = findViewById<ListView>(R.id.list_cancion)
-                (listViewCancion.adapter as ArrayAdapter<*>).notifyDataSetChanged()
+                val exitoEliminacion = SqliteBDD.BDMundoMuscial!!.eliminarCancion(arregloCanciones[posicionItemSeleccionado].id)
+                if (exitoEliminacion) {
+                    arregloCanciones.removeAt(posicionItemSeleccionado)
+                    val listViewCancion = findViewById<ListView>(R.id.list_cancion)
+                    (listViewCancion.adapter as ArrayAdapter<*>).notifyDataSetChanged()
+                } else {
+                    mostrarSnackbar("No se pudo eliminar la canción")
+                }
                 return true
             }
             else -> super.onContextItemSelected(item)
@@ -101,7 +104,6 @@ class CancionActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         val intent = Intent(this, MainActivity::class.java)
-        //intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
         super.onBackPressed()
     }

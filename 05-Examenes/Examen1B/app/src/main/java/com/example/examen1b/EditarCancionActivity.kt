@@ -9,12 +9,11 @@ import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.ImageButton
 import androidx.annotation.RequiresApi
+import com.example.examen1b.sqlite.SqliteBDD
 import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
 
 class EditarCancionActivity : AppCompatActivity() {
-    val arregloArtistas = BaseDatosMemoria.arrayArtista
-    val arregloCanciones = BaseDatosMemoria.arrayCancion
     var txtEditFecha: EditText? = null
     var btnEditFecha: ImageButton? = null
     var dpEditFecha: DatePicker? = null
@@ -25,11 +24,9 @@ class EditarCancionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_editar_cancion)
 
-        val indexArtista = intent.getIntExtra("indexArtista", -1)
-        val indexCancion = intent.getIntExtra("indexCancion", -1)
-        val posicionCancion = intent.getIntExtra("posicionCancion", -1)
+        val idCancion = intent.getIntExtra("idCancion", -1)
 
-        val cancion = arregloCanciones[indexCancion]
+        val cancion = SqliteBDD.BDMundoMuscial!!.consultarCancionPorID(idCancion)
 
         //Autollenado de datos
         val inputNombre = findViewById<EditText>(R.id.input_nombre_edit_cancion)
@@ -56,38 +53,45 @@ class EditarCancionActivity : AppCompatActivity() {
 
         val botonEditarCancion = findViewById<android.widget.Button>(R.id.btn_guardar_cancion)
         botonEditarCancion.setOnClickListener() {
-            guardarCancion(indexCancion, indexArtista, cancion!!, posicionCancion)
+            guardarCancion(cancion!!)
             intent = Intent(this, CancionActivity::class.java)
-            intent.putExtra("idArtista", arregloArtistas[indexArtista].id)
+            intent.putExtra("idArtista", cancion.idArtista)
             startActivity(intent)
         }
 
 
     }
 
-    fun guardarCancion(indexCancion: Int, indexArtista: Int, cancion: Cancion, posicionCancion: Int){
-        cancion?.let {
-            val inputNombre = findViewById<EditText>(R.id.input_nombre_edit_cancion)
-            val inputDuracion = findViewById<EditText>(R.id.input_edit_duracion)
-            val inputAlbum = findViewById<EditText>(R.id.input_edit_album)
-            val inputGenero = findViewById<EditText>(R.id.input_edit_genero)
+    fun guardarCancion( cancion: Cancion){
 
-            it.nombre = inputNombre.text.toString()
-            it.duracion = inputDuracion.text.toString().toInt()
-            it.album = inputAlbum.text.toString()
-            it.genero = inputGenero.text.toString()
-            it.fechaLanzamiento = dateFormat.parse(txtEditFecha?.text.toString())
+        val inputNombre = findViewById<EditText>(R.id.input_nombre_edit_cancion)
+        val inputDuracion = findViewById<EditText>(R.id.input_edit_duracion)
+        val inputAlbum = findViewById<EditText>(R.id.input_edit_album)
+        val inputGenero = findViewById<EditText>(R.id.input_edit_genero)
+
+        val nombre = inputNombre.text.toString()
+        val duracion = inputDuracion.text.toString().toInt()
+        val album = inputAlbum.text.toString()
+        val genero = inputGenero.text.toString()
+        val fechaLanzamiento = txtEditFecha?.text.toString()
 
 
-            arregloArtistas[indexArtista].canciones[posicionCancion] = it
-            arregloCanciones[indexCancion] = it
+        SqliteBDD.BDMundoMuscial!!.actualizarCancion(
+            nombre,
+            cancion.idArtista,
+            duracion,
+            album,
+            genero,
+            fechaLanzamiento,
+            cancion.id
+        )
 
-            //Limpiar campos
-            inputNombre.text.clear()
-            inputDuracion.text.clear()
-            inputAlbum.text.clear()
-            inputGenero.text.clear()
-        }
+        //Limpiar campos
+        inputNombre.text.clear()
+        inputDuracion.text.clear()
+        inputAlbum.text.clear()
+        inputGenero.text.clear()
+
     }
 
     fun getFechaDtPicker(): String {

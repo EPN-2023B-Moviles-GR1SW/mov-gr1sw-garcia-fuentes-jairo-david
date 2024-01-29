@@ -5,6 +5,7 @@ import java.util.*
 class Cancion (
     var id: Int,
     var nombre: String,
+    var idArtista: Int,
     var duracion: Int,
     var album: String,
     var genero: String,

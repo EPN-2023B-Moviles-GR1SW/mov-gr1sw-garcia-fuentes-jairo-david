@@ -11,11 +11,13 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.examen1b.sqlite.SqliteBDD
+import com.example.examen1b.sqlite.SqliteHelper
 import com.google.android.material.snackbar.Snackbar
 
 
 class MainActivity : AppCompatActivity() {
-    val arreglo = BaseDatosMemoria.arrayArtista
+    var arreglo = arrayListOf<Artista>()
     var posicionItemSeleccionado = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,8 +25,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val listView = findViewById<ListView>(R.id.list_artista)
+        //Base de datos SQLite
+        SqliteBDD.BDMundoMuscial = SqliteHelper(this)
 
+        val listView = findViewById<ListView>(R.id.list_artista)
+        arreglo = SqliteBDD.BDMundoMuscial!!.consultarArtistas()
         val adaptador = ArrayAdapter(
             this, //Context
             android.R.layout.simple_list_item_1, //como se va a ver (XML)
@@ -69,9 +74,14 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
             R.id.mi_eliminar_artista ->{
-                arreglo.removeAt(posicionItemSeleccionado)
-                val listView = findViewById<ListView>(R.id.list_artista)
-                (listView.adapter as ArrayAdapter<*>).notifyDataSetChanged()
+                val exitoEliminacion = SqliteBDD.BDMundoMuscial!!.eliminarArtista(arreglo[posicionItemSeleccionado].id)
+                if (exitoEliminacion) {
+                    arreglo.removeAt(posicionItemSeleccionado)
+                    val listView = findViewById<ListView>(R.id.list_artista)
+                    (listView.adapter as ArrayAdapter<*>).notifyDataSetChanged()
+                } else {
+                    mostrarSnackbar("No se pudo eliminar el artista")
+                }
                 return true
             }
             R.id.mi_ver_canciones ->{
@@ -84,7 +94,9 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
             else -> super.onContextItemSelected(item)
+
         }
+
     }
 
     fun mostrarSnackbar(texto:String){

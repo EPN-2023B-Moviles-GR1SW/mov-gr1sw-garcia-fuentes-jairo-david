@@ -9,10 +9,11 @@ import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.EditText
+import com.example.examen1b.sqlite.SqliteBDD
 import com.google.android.material.snackbar.Snackbar
 
 class CrearArtistaActivity : AppCompatActivity() {
-    val arregloCanciones = BaseDatosMemoria.arrayCancion
+    val arregloCanciones = SqliteBDD.BDMundoMuscial!!.consultarCanciones()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,14 +49,17 @@ class CrearArtistaActivity : AppCompatActivity() {
 
             // Obtener los valores ingresados
             val nombre = inputNombre.text.toString()
-            val id = 0
             val edad = inputEdad.text.toString().toInt()
             val patrimonio = inputPatrimonio.text.toString().toDouble()
             val vivo = rdbVivo.isChecked
 
             // Crear un nuevo artista con los valores ingresados
-            val nuevoArtista = Artista(id, nombre, edad, arrayListOf<Cancion>(), vivo, patrimonio)
-
+            val idArtista = SqliteBDD.BDMundoMuscial!!.crearArtista(
+                nombre,
+                edad,
+                vivo,
+                patrimonio
+            )
             // Agregar canciones al nuevo artista
             for (i in 0 until llCanciones.childCount) {
                 val checkBox = llCanciones.getChildAt(i) as CheckBox
@@ -63,13 +67,15 @@ class CrearArtistaActivity : AppCompatActivity() {
                     val idCancion = obtenerIdCancionDesdeCheckBox(checkBox)
                     val nuevaCancion = obtenerCancionPorId(idCancion)
                     if (nuevaCancion != null) {
-                        nuevoArtista.canciones.add(nuevaCancion)
+                        SqliteBDD.BDMundoMuscial!!.asignarArtistaACancion(
+                            idArtista,
+                            idCancion
+                        )
                     }
                 }
             }
 
-            // Agregar el nuevo artista al array de artistas
-            BaseDatosMemoria.agregarArtista(nuevoArtista)
+
 
             // Limpiar los campos después de agregar el artista
             inputNombre.text.clear()

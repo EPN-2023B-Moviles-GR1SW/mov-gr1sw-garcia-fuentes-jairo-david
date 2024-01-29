@@ -3,6 +3,7 @@ package com.example.examen1b
 import java.text.SimpleDateFormat
 
 class BaseDatosMemoria {
+    /*
     companion object {
         var contadorArtistas = 2
         var contadorCanciones = 5
@@ -31,4 +32,5 @@ class BaseDatosMemoria {
             arrayCancion.add(cancion)
         }
     }
+    */
 }

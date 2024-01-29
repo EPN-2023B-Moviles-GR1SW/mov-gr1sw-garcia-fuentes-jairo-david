@@ -10,15 +10,15 @@ import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.ImageButton
 import androidx.annotation.RequiresApi
+import com.example.examen1b.sqlite.SqliteBDD
 import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
 
 class CrearCancionActivity : AppCompatActivity() {
-    val arregloArtistas = BaseDatosMemoria.arrayArtista
+
     var txtFecha:EditText? = null
     var btnFecha:ImageButton? = null
     var dpFecha:DatePicker? = null
-    val dateFormat = SimpleDateFormat("dd/MM/yyyy")
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -62,13 +62,15 @@ class CrearCancionActivity : AppCompatActivity() {
         val fecha = txtFecha?.text.toString()
 
         val idArtista= intent.getIntExtra("idArtista", -1)
-        val artista = arregloArtistas.find { artista -> artista.id == idArtista }
 
-
-        val nuevaCancion = Cancion(BaseDatosMemoria.contadorCanciones, nombre, duracion, album, genero, dateFormat.parse(fecha)!!)
-
-        BaseDatosMemoria.agregarCancion(nuevaCancion)
-        artista!!.canciones.add(nuevaCancion)
+        SqliteBDD.BDMundoMuscial!!.crearCancion(
+            nombre,
+            idArtista,
+            duracion,
+            album,
+            genero,
+            fecha
+        )
 
         //Limpiar campos
         inputNombre.text.clear()
