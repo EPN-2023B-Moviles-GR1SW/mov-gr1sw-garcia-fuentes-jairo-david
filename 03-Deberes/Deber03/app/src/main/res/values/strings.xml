@@ -1,0 +1,96 @@
+<resources>
+    <string name="app_name">WhatsAppClone</string>
+
+    <string-array name="type">
+        <item>@drawable/video</item>
+        <item>@drawable/phone</item>
+        <item>@drawable/video</item>
+        <item>@drawable/phone</item>
+        <item>@drawable/phone</item>
+        <item>@drawable/video</item>
+        <item>@drawable/video</item>
+        <item>@drawable/phone</item>
+        <item>@drawable/phone</item>
+        <item>@drawable/video</item>
+    </string-array>
+
+    <string-array name="arrow">
+        <item>@drawable/red_arrow</item>
+        <item>@drawable/red_arrow</item>
+        <item>@drawable/green_arrow</item>
+        <item>@drawable/green_arrow</item>
+        <item>@drawable/green_arrow</item>
+        <item>@drawable/red_arrow</item>
+        <item>@drawable/green_arrow</item>
+        <item>@drawable/green_arrow</item>
+        <item>@drawable/red_arrow</item>
+        <item>@drawable/red_arrow</item>
+    </string-array>
+
+    <string-array name="image">
+        <item>@drawable/a</item>
+        <item>@drawable/b</item>
+        <item>@drawable/c</item>
+        <item>@drawable/d</item>
+        <item>@drawable/e</item>
+        <item>@drawable/f</item>
+        <item>@drawable/g</item>
+        <item>@drawable/h</item>
+        <item>@drawable/i</item>
+        <item>@drawable/j</item>
+    </string-array>
+
+    <string-array name="name">
+        <item>Prima</item>
+        <item>Carla</item>
+        <item>Bro</item>
+        <item>Steven</item>
+        <item>Nico</item>
+        <item>Leyla</item>
+        <item>Abuelo</item>
+        <item>Primo</item>
+        <item>Abuela</item>
+        <item>Ñaña</item>
+    </string-array>
+
+    <string-array name="status">
+        <item>Hola, ¿cómo estás?</item>
+        <item>¿Qué tal?</item>
+        <item>¿Cómo te va?</item>
+        <item>¿Qué haces?</item>
+        <item>¿Qué onda?</item>
+        <item>¿Qué pasa?</item>
+        <item>¿Cómo andas?</item>
+        <item>¿Qué cuentas?</item>
+        <item>¿Qué hay de nuevo?</item>
+        <item>¿Qué hay?</item>
+    </string-array>
+
+    <string-array name="time">
+        <item>12:00</item>
+        <item>13:00</item>
+        <item>14:00</item>
+        <item>15:00</item>
+        <item>16:00</item>
+        <item>Ayer</item>
+        <item>Ayer</item>
+        <item>Ayer</item>
+        <item>9/2/2024</item>
+        <item>8/2/2024</item>
+    </string-array>
+
+
+    <string-array name="time2">
+        <item>Justo ahora</item>
+        <item>23 de enero, 4:06 p. m.</item>
+        <item>22 de enero, 4:06 a. m.</item>
+        <item>9 de enero, 4:46 p. m.</item>
+        <item>26/12/2023, 5:57 p. m.</item>
+        <item>20/11/2023, 2:36 p. m.</item>
+        <item>16/10/2023, 1:06 p. m.</item>
+        <item>12/9/2023, 6:16 p. m.</item>
+        <item>9/8/2023, 8:06 a. m.</item>
+        <item>6/7/2023, 3:06 p. m.</item>
+    </string-array>
+
+</resources>
